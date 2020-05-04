@@ -112,6 +112,9 @@ def run_input_on_automaton(FA, inputs, bits):
     for i in range(bits):
         print('State{}: '.format(i), state)
         key = ''.join([str(bi([u], i)) for u in inputs])
+        if key not in FA[state]:
+            print('The input word is not accepted by this automaton')
+            return
         state = FA[state][key]
     print('Final state:', state)
     print('The input word is accepted by this automaton')
@@ -129,24 +132,49 @@ def convert(path):
     path = np.array([np.flip(i) for i in path])
     return [str_to_list(i) for i in path]
 
-
-
-if __name__ == "__main__":
-
-    bits = 8
+# test 1
+def T1(bits):
+    print('\nT1:')
     c1 = (3,-2,1,5)
-    c2 = (6,-4,1,3)
+    c2 = (6,-4,2,9)
     M1, M2 = dict(), dict()
     M1 = create_finite_automaton(c1, M1, (0,0), bits)
     M2 = create_finite_automaton(c2, M2, (0,0), bits)
     #print_states(M1)
-    print()
+    #print()
     #print_states(M2)
     path_to_accepting_state_M1 = solution_search(M1, c1, bits)
     path_to_accepting_state_M2 = solution_search(M2, c2, bits)
     M1_outputs = convert(path_to_accepting_state_M1)
     M2_outputs = convert(path_to_accepting_state_M2)
-    print('\nM1 outputs:', M1_outputs)
+    print('M1 outputs:', M1_outputs)
     print('M2 outputs:', M2_outputs)
     run_input_on_automaton(M1, M1_outputs, bits)
     run_input_on_automaton(M2, M2_outputs, bits)
+
+# test 2
+def T2(bits):
+    print('\nT2:')
+    c1 = (3,-2,-1,3)
+    c2 = (6,-4,1,3)
+    M1, M2 = dict(), dict()
+    M1 = create_finite_automaton(c1, M1, (0,0), bits)
+    M2 = create_finite_automaton(c2, M2, (0,0), bits)
+    #print_states(M1)
+    #print()
+    #print_states(M2)
+    path_to_accepting_state_M1 = solution_search(M1, c1, bits)
+    path_to_accepting_state_M2 = solution_search(M2, c2, bits)
+    M1_outputs = convert(path_to_accepting_state_M1)
+    M2_outputs = convert(path_to_accepting_state_M2)
+    print('M1 outputs:', M1_outputs)
+    print('M2 outputs:', M2_outputs)
+    run_input_on_automaton(M1, M1_outputs, bits)
+    run_input_on_automaton(M2, M2_outputs, bits)
+
+
+if __name__ == "__main__":
+
+    bits = 8
+    T1(bits)
+    T2(bits)
